@@ -1,0 +1,150 @@
+var _user$project$Main$flagArea = function (model) {
+	return A2(
+		_elm_lang$html$Html$div,
+		_elm_lang$core$Native_List.fromArray(
+			[]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				A2(
+				_elm_lang$html$Html$p,
+				_elm_lang$core$Native_List.fromArray(
+					[]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text(
+						A2(_elm_lang$core$Basics_ops['++'], 'The config value is ', model.configFromJS))
+					]))
+			]));
+};
+var _user$project$Main$resultArea = function (model) {
+	return (model.isValid && (!_elm_lang$core$Native_Utils.eq(model.email, ''))) ? A2(
+		_elm_lang$html$Html$div,
+		_elm_lang$core$Native_List.fromArray(
+			[]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html$text('Your email is valid')
+			])) : (_elm_lang$core$Native_Utils.eq(model.email, '') ? A2(
+		_elm_lang$html$Html$div,
+		_elm_lang$core$Native_List.fromArray(
+			[]),
+		_elm_lang$core$Native_List.fromArray(
+			[])) : A2(
+		_elm_lang$html$Html$div,
+		_elm_lang$core$Native_List.fromArray(
+			[]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html$text('Your email is fake')
+			])));
+};
+var _user$project$Main$sendToJS = _elm_lang$core$Native_Platform.outgoingPort(
+	'sendToJS',
+	function (v) {
+		return v;
+	});
+var _user$project$Main$update = F2(
+	function (msg, model) {
+		var _p0 = msg;
+		switch (_p0.ctor) {
+			case 'CheckEmail':
+				return {
+					ctor: '_Tuple2',
+					_0: model,
+					_1: _user$project$Main$sendToJS(model.email)
+				};
+			case 'Submit':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{isValid: _p0._0}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			default:
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{email: _p0._0}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+		}
+	});
+var _user$project$Main$dataFromJS = _elm_lang$core$Native_Platform.incomingPort('dataFromJS', _elm_lang$core$Json_Decode$bool);
+var _user$project$Main$Flags = function (a) {
+	return {config: a};
+};
+var _user$project$Main$User = F3(
+	function (a, b, c) {
+		return {email: a, isValid: b, configFromJS: c};
+	});
+var _user$project$Main$init = function (flag) {
+	return {
+		ctor: '_Tuple2',
+		_0: A3(_user$project$Main$User, '', false, flag.config),
+		_1: _elm_lang$core$Platform_Cmd$none
+	};
+};
+var _user$project$Main$UpdateEmail = function (a) {
+	return {ctor: 'UpdateEmail', _0: a};
+};
+var _user$project$Main$Submit = function (a) {
+	return {ctor: 'Submit', _0: a};
+};
+var _user$project$Main$subscriptions = function (model) {
+	return _user$project$Main$dataFromJS(_user$project$Main$Submit);
+};
+var _user$project$Main$CheckEmail = {ctor: 'CheckEmail'};
+var _user$project$Main$formArea = A2(
+	_elm_lang$html$Html$form,
+	_elm_lang$core$Native_List.fromArray(
+		[
+			_elm_lang$html$Html_Events$onSubmit(_user$project$Main$CheckEmail)
+		]),
+	_elm_lang$core$Native_List.fromArray(
+		[
+			A2(
+			_elm_lang$html$Html$input,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_elm_lang$html$Html_Attributes$type$('text'),
+					_elm_lang$html$Html_Attributes$placeholder('Email'),
+					_elm_lang$html$Html_Attributes$name('email'),
+					_elm_lang$html$Html_Events$onInput(_user$project$Main$UpdateEmail)
+				]),
+			_elm_lang$core$Native_List.fromArray(
+				[])),
+			A2(
+			_elm_lang$html$Html$input,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_elm_lang$html$Html_Attributes$type$('submit'),
+					_elm_lang$html$Html_Attributes$value('Login')
+				]),
+			_elm_lang$core$Native_List.fromArray(
+				[]))
+		]));
+var _user$project$Main$view = function (model) {
+	return A2(
+		_elm_lang$html$Html$div,
+		_elm_lang$core$Native_List.fromArray(
+			[]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_user$project$Main$formArea,
+				_user$project$Main$resultArea(model),
+				_user$project$Main$flagArea(model)
+			]));
+};
+var _user$project$Main$main = {
+	main: _elm_lang$html$Html_App$programWithFlags(
+		{init: _user$project$Main$init, view: _user$project$Main$view, update: _user$project$Main$update, subscriptions: _user$project$Main$subscriptions}),
+	flags: A2(
+		_elm_lang$core$Json_Decode$andThen,
+		A2(_elm_lang$core$Json_Decode_ops[':='], 'config', _elm_lang$core$Json_Decode$string),
+		function (config) {
+			return _elm_lang$core$Json_Decode$succeed(
+				{config: config});
+		})
+};
